@@ -1,22 +1,33 @@
-import { useState } from 'react'
+import { useState, ChangeEvent} from 'react'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [prevCount, setPrevCount] = useState(0)
+  const [todo, setTodo] = useState('')
+  const [todoList, setTodoList] = useState<string[]>([])
 
-  const handleIncrease = () => {
-    setCount((prevCount) => {
-      // đoạn này setPrevCount để có thể xem giá trị trước đó
-      setPrevCount(prevCount)
-      return prevCount + 1
-    })
+  function handleChangeTodo(e: ChangeEvent<HTMLInputElement>) {
+    setTodo(e.target.value)
+    console.log('todo', todo)
+  }
+  function handleSaveTodo() {
+    setTodoList((prevTodoList) => [...prevTodoList, todo])
   }
 
+  // đoạn này là giao diênhjtức
   return (
     <div>
-      <p>count: {count}</p>
-      <p>preCount: {prevCount}</p>
-      <button onClick={handleIncrease}>Increase</button>
+      <input
+        placeholder='Nhập công việc của bạn vào đây'
+        style={{ border: '1px solid #ddd' }}
+        type='text'
+        value={todo}
+        onChange={handleChangeTodo}
+      />
+      <button onClick={handleSaveTodo}>Thêm</button>
+      <ul className='pl-4'>
+        {todoList.map((todo, index) => (
+          <li key={index}>{todo}</li>
+        ))}
+      </ul>
     </div>
   )
 }
