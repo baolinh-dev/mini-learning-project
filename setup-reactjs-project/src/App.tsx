@@ -1,38 +1,32 @@
-import { useState, ChangeEvent, useEffect } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 
 function App() {
-  const [todo, setTodo] = useState('')
-  const [todoList, setTodoList] = useState<string[]>([])
+  const [todo, setTodo] = useState<string>('')
+  const [todoList, setTodoList] = useState<string[]>([]) 
 
-  // Khi component re-render thì callback sẽ được gọi
-  useEffect(() => {
-    document.title = todo
-  })
-
-  function handleChangeTodo(e: ChangeEvent<HTMLInputElement>) {
+  function handleChangeTodo(e: ChangeEvent<HTMLInputElement>): void {
     setTodo(e.target.value)
-    console.log('todo:', todo)
+  }
+  function handleAddTodo() {
+    setTodoList((prevList) => [...prevList, todo])
+    setTodo('')
+  } 
+  function handleDeleteTodo(todoItem: string) {
+    setTodoList((prevList) => prevList.filter(item => item !== todoItem))
   }
 
-  function handleSaveTodo() {
-    setTodoList((prevTodoList) => [...prevTodoList, todo])
-    console.log('todoList:', todoList)
-  }
-
-  // đoạn này là giao diênhjtức
   return (
     <div>
-      <input
-        placeholder='Nhập công việc của bạn vào đây'
-        style={{ border: '1px solid #ddd' }}
-        type='text'
-        value={todo}
-        onChange={handleChangeTodo}
-      />
-      <button onClick={handleSaveTodo}>Thêm</button>
-      <ul className='pl-4'>
-        {todoList.map((todo, index) => (
-          <li key={index}>{todo}</li>
+      <h1>TodoList</h1>
+      <input style={{ border: '1px solid black' }} type='text' value={todo} onChange={handleChangeTodo} />
+      <button onClick={handleAddTodo}>Add</button>
+      <ul>
+        {todoList.map((todoItem) => (
+          <div>
+            <li key={todoItem}>{todoItem}</li>
+            <button onClick={() => handleDeleteTodo(todoItem)}>Delete</button>  
+
+          </div>
         ))}
       </ul>
     </div>
